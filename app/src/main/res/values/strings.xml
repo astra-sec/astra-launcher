@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Astra Launcher</string>
+    <string name="weather_status_unavailable">地点未设置 · 暂无天气</string>
+    <string name="weather_status_with_source_description">%1$s，天气数据来源：%2$s</string>
+    <string name="favorites">常用应用</string>
+    <string name="all_apps">全部应用</string>
+    <string name="settings">设置</string>
+    <string name="files">文件</string>
+    <string name="back">返回</string>
+    <string name="cancel">取消</string>
+    <string name="no_favorites">长按“全部应用”中的应用，将它加入这里</string>
+
+    <string name="input_compatibility">输入方式</string>
+    <string name="input_compatibility_summary">触摸和方向键始终同时可用。触摸直接操作页面；按下方向键后显示焦点并进入标准焦点导航。</string>
+    <string name="settings_scope_title">当前版本范围</string>
+    <string name="settings_scope_body">响应式主页、每日图片、收藏、全部应用、地点天气、系统设置快捷入口、公共 TV 输入源和内部返回链路。没有设备模式、悬浮控件、无障碍服务或原厂桌面接管逻辑。</string>
+    <string name="data_sources_title">地点与天气数据</string>
+    <string name="data_sources_body">地点按公网 IP 粗略推断：优先 IPWhois，备用 wttr.in。天气优先 Open-Meteo，备用 wttr.in；网络不可用时显示最近一次成功缓存。地点最多每 24 小时刷新，天气最多每 30 分钟刷新。</string>
+    <string name="data_sources_privacy">不会读取 GPS，也不会保存公网 IP。地点可能只精确到城市或网络出口所在地。</string>
+    <string name="data_attribution_title">数据来源与许可</string>
+    <string name="data_attribution_hint">点击名称查看服务说明与许可。</string>
+    <string name="open_meteo_attribution">天气：Open-Meteo · CC BY 4.0</string>
+    <string name="wttr_attribution">备用天气与地点：wttr.in</string>
+    <string name="ipwhois_attribution">粗略地点：IPWhois</string>
+
+    <string name="add_to_favorites">加入常用应用</string>
+    <string name="remove_from_favorites">从常用应用移除</string>
+    <string name="added_to_favorites">已加入常用应用</string>
+    <string name="removed_from_favorites">已从常用应用移除</string>
+    <string name="app_info">应用信息</string>
+    <string name="app_launch_failed">无法启动这个应用</string>
+
+    <string name="wifi_settings">Wi‑Fi</string>
+    <string name="bluetooth_settings">蓝牙</string>
+    <string name="system_settings">系统设置</string>
+    <string name="input_sources">信号源</string>
+    <string name="input_sources_summary">仅显示 Android TV 输入框架实际报告的 HDMI、AV视频等透传输入，不根据品牌或型号猜测。</string>
+    <string name="no_input_sources">这台设备没有报告可用的外部信号源</string>
+    <string name="input_connected">已连接</string>
+    <string name="input_standby">待机</string>
+    <string name="input_disconnected">未连接</string>
+    <string name="input_state_unknown">状态未知</string>
+    <string name="settings_launch_failed">系统没有可打开的设置页面</string>
+    <string name="input_launch_failed">系统报告了此信号源，但没有提供可打开它的入口</string>
+    <string name="file_manager_unavailable">系统没有可用的文件管理器</string>
+    <string name="file_open_failed">没有应用可以打开这个文件</string>
+    <string name="system_access_title">系统入口</string>
+    <string name="system_access_summary">部分电视不会在应用列表中公开系统设置，因此在这里保留一个明确入口。</string>
+    <string name="open_system_settings">打开系统设置</string>
+    <string name="daily_image_settings_title">每日图片</string>
+    <string name="daily_image_provider_order">来源顺序：Bing → Wikimedia Commons → NASA APOD。全部失败时继续显示最近一次成功缓存。</string>
+    <string name="daily_image_not_cached">尚无成功缓存的每日图片</string>
+    <string name="daily_image_info_format">%1$s\n来源：%2$s\n作者或版权：%3$s\n许可：%4$s</string>
+    <string name="daily_image_credit_unknown">未提供</string>
+    <string name="daily_image_license_unknown">请查看来源页面</string>
+    <string name="open_daily_image_source">查看图片来源与许可</string>
+</resources>

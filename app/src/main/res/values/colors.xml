@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="screen_top">#0B1322</color>
+    <color name="screen_bottom">#101D31</color>
+    <color name="surface">#DD1A2940</color>
+    <color name="surface_pressed">#284563</color>
+    <color name="surface_focused">#294B69</color>
+    <color name="accent">#82D9FF</color>
+    <color name="text_primary">#F5F8FC</color>
+    <color name="text_secondary">#AEBED0</color>
+</resources>
