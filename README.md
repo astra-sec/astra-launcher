@@ -2,6 +2,8 @@
 
 Astra Launcher 是一个面向 Android 8+ 横屏设备的轻量桌面原型。当前版本专注于桌面本体，不包含原厂桌面接管、无障碍服务或悬浮控件；网络仅用于地点与天气。
 
+![Astra Launcher 主页截图](docs/images/astra-launcher-home.png)
+
 ## 当前功能
 
 - Kotlin + 传统 View/XML，最低支持 API 26。
