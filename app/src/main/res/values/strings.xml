@@ -43,6 +43,7 @@
     <string name="input_state_unknown">状态未知</string>
     <string name="settings_launch_failed">系统没有可打开的设置页面</string>
     <string name="input_launch_failed">系统报告了此信号源，但没有提供可打开它的入口</string>
+    <string name="input_player_picker">选择信号源播放器</string>
     <string name="file_manager_unavailable">系统没有可用的文件管理器</string>
     <string name="file_open_failed">没有应用可以打开这个文件</string>
     <string name="system_access_title">系统入口</string>
