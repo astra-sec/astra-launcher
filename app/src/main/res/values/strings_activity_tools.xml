@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="activity_tools_title">Activity 工具</string>
+    <string name="activity_tools_search">搜索应用、包名或 Activity</string>
+    <string name="activity_tools_favorites_only">仅收藏</string>
+    <string name="activity_tools_manual">输入组件</string>
+    <string name="activity_tools_refresh">刷新</string>
+    <string name="activity_tools_loading">正在读取应用页面…</string>
+    <string name="activity_tools_count">%1$d 个应用 · %2$d 个 Activity</string>
+    <string name="activity_tools_empty">没有匹配的 Activity</string>
+    <string name="activity_tools_summary">包括系统应用的内部页面。只有已启用、允许外部调用且权限满足的页面可以尝试启动。</string>
+    <string name="activity_tools_available">可尝试启动</string>
+    <string name="activity_tools_not_exported">未对外开放</string>
+    <string name="activity_tools_disabled">已停用</string>
+    <string name="activity_tools_permission_required">需要权限：%1$s</string>
+    <string name="activity_tools_launch">启动</string>
+    <string name="activity_tools_favorite_add">收藏</string>
+    <string name="activity_tools_favorite_remove">取消收藏</string>
+    <string name="activity_tools_copy">复制组件</string>
+    <string name="activity_tools_copied">已复制组件</string>
+    <string name="activity_tools_details">应用：%1$s\n组件：%2$s\nexported：%3$s\nenabled：%4$s\n权限：%5$s\n\n%6$s\n\n部分页面需要调用参数，启动后可能自动关闭。</string>
+    <string name="activity_tools_no_permission">无需额外权限</string>
+    <string name="activity_tools_failed">无法启动：%1$s</string>
+    <string name="activity_tools_load_failed">读取失败：%1$s</string>
+    <string name="activity_tools_manual_hint">包名/完整类名 或 包名/.相对类名</string>
+    <string name="activity_tools_manual_lookup">查看</string>
+    <string name="activity_tools_manual_invalid">请输入有效组件，例如 com.example.app/.MainActivity</string>
+    <string name="activity_tools_manual_missing">未找到此 Activity，或它对 Astra 不可见</string>
+    <string name="activity_tools_cancel">取消</string>
+</resources>

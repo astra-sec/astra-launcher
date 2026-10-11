@@ -14,7 +14,7 @@
     <string name="input_compatibility">输入方式</string>
     <string name="input_compatibility_summary">触摸和方向键始终同时可用。触摸直接操作页面；按下方向键后显示焦点并进入标准焦点导航。</string>
     <string name="settings_scope_title">当前版本范围</string>
-    <string name="settings_scope_body">响应式主页、每日图片、收藏、全部应用、地点天气、系统设置快捷入口、公共 TV 输入源和内部返回链路。没有设备模式、悬浮控件、无障碍服务或原厂桌面接管逻辑。</string>
+    <string name="settings_scope_body">响应式主页、每日图片、收藏、全部应用、地点天气、系统设置快捷入口、公共 TV 输入源，以及 Activity 浏览、应用权限 Shell 和局域网安装 APK。没有设备模式、悬浮控件、无障碍服务或原厂桌面接管逻辑。</string>
     <string name="data_sources_title">地点与天气数据</string>
     <string name="data_sources_body">地点按公网 IP 粗略推断：优先 IPWhois，备用 wttr.in。天气优先 Open-Meteo，备用 wttr.in；网络不可用时显示最近一次成功缓存。地点最多每 24 小时刷新，天气最多每 30 分钟刷新。</string>
     <string name="data_sources_privacy">不会读取 GPS，也不会保存公网 IP。地点可能只精确到城市或网络出口所在地。</string>

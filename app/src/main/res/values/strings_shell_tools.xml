@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shell_tools_title">Shell 命令</string>
+    <string name="shell_scope">以 Astra 应用身份执行（UID %1$d），不是 ADB 或 root。命令模式不支持交互式终端；离开此页会停止命令。</string>
+    <string name="shell_command_hint">输入命令，例如 id</string>
+    <string name="shell_run">运行</string>
+    <string name="shell_stop">停止</string>
+    <string name="shell_examples">只读示例</string>
+    <string name="shell_history">历史命令</string>
+    <string name="shell_clear_history">清空历史</string>
+    <string name="shell_history_empty">还没有执行过命令。</string>
+    <string name="shell_empty_command">请输入命令</string>
+    <string name="shell_ready">选择示例只会填入命令，点击“运行”后才执行。</string>
+    <string name="shell_running">正在执行…</string>
+    <string name="shell_stopping">正在停止…</string>
+    <string name="shell_cancelled">已停止</string>
+    <string name="shell_exit_code">已结束 · 退出码 %1$d</string>
+    <string name="shell_error">执行失败：%1$s</string>
+    <string name="shell_output_truncated">[仅保留最近 65,536 个字符]\n</string>
+    <string name="shell_output_description">命令输出，可用方向键滚动</string>
+</resources>

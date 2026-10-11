@@ -20,6 +20,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), DefaultFocusOwner
         val activity = requireActivity() as LauncherActivity
         backButton = view.findViewById(R.id.backButton)
         backButton?.setOnClickListener { activity.showHome() }
+        view.findViewById<View>(R.id.activityToolsButton).setOnClickListener { activity.showActivityTools() }
+        view.findViewById<View>(R.id.shellToolsButton).setOnClickListener { activity.showShellTools() }
+        view.findViewById<View>(R.id.apkUploadButton).setOnClickListener { activity.showApkUpload() }
         bindSystemSettings(view)
         bindDailyImage(view)
         bindSource(view, R.id.openMeteoSource, "https://open-meteo.com/en/license")

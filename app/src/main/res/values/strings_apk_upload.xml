@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="advanced_tools_title">高级工具</string>
+    <string name="advanced_activities">Activity 浏览与启动</string>
+    <string name="advanced_shell">Shell 命令</string>
+    <string name="advanced_apk_upload">局域网安装 APK</string>
+    <string name="apk_upload_intro">打开接收后，在同一局域网的手机或电脑浏览器访问下方地址，输入配对码并上传 APK。随后在此处确认安装。</string>
+    <string name="apk_upload_start">开启接收</string>
+    <string name="apk_upload_stop">停止接收</string>
+    <string name="apk_upload_stopped">接收已关闭</string>
+    <string name="apk_upload_starting">正在开启接收…</string>
+    <string name="apk_upload_no_network">未找到局域网 IPv4 地址，请先连接 Wi-Fi 或网线。</string>
+    <string name="apk_upload_address">浏览器访问：\n%1$s\n\n配对码：%2$s</string>
+    <string name="apk_upload_lifetime">保持此页即可接收；离开此页会停止接收。单个 APK 最大 256 MB，接收将在 15 分钟后关闭。</string>
+    <string name="apk_upload_empty">等待上传 APK</string>
+    <string name="apk_upload_details">%1$s · %2$s\n%3$s\n大小：%4$s MB</string>
+    <string name="apk_upload_install">安装</string>
+    <string name="apk_upload_discard">清除安装包</string>
+    <string name="apk_upload_received">已收到安装包，请在投影仪或电视上点击「安装」。</string>
+    <string name="apk_upload_invalid">无法识别为完整的 APK，请上传单个 .apk 文件。</string>
+    <string name="apk_upload_pending">请先在设备上安装或清除上一份安装包。</string>
+    <string name="apk_upload_permission">请先允许 Astra 安装未知应用，返回后继续。</string>
+    <string name="apk_upload_permission_denied">尚未允许安装。点击「安装」可重新打开授权页。</string>
+    <string name="apk_upload_installer_opened">请在系统界面确认安装。</string>
+    <string name="apk_upload_installer_returned">安装界面已关闭。新应用会出现在「全部应用」中。</string>
+    <string name="apk_upload_failed">操作失败：%1$s</string>
+    <string name="apk_upload_expired">接收已自动关闭，可再次开启。</string>
+</resources>

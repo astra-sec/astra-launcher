@@ -11,6 +11,9 @@ import org.astrasec.launcher.ui.DefaultFocusOwner
 import org.astrasec.launcher.ui.HomeFragment
 import org.astrasec.launcher.ui.InputSourcesFragment
 import org.astrasec.launcher.ui.SettingsFragment
+import org.astrasec.launcher.activitytools.ActivityToolsFragment
+import org.astrasec.launcher.shelltools.ShellToolsFragment
+import org.astrasec.launcher.apkupload.ApkUploadFragment
 
 class LauncherActivity : AppCompatActivity() {
     private var directionalNavigationActive = false
@@ -46,10 +49,17 @@ class LauncherActivity : AppCompatActivity() {
         replaceRoot(InputSourcesFragment(), TAG_INPUT_SOURCES)
     }
 
+    fun showActivityTools() = replaceRoot(ActivityToolsFragment(), "activity_tools")
+
+    fun showShellTools() = replaceRoot(ShellToolsFragment(), "shell_tools")
+
+    fun showApkUpload() = replaceRoot(ApkUploadFragment(), "apk_upload")
+
     @Suppress("DEPRECATION")
     override fun onBackPressed() {
         when (supportFragmentManager.findFragmentById(R.id.fragmentContainer)) {
             is HomeFragment -> Unit
+            is ActivityToolsFragment, is ShellToolsFragment, is ApkUploadFragment -> showSettings()
             else -> showHome()
         }
     }
