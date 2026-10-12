@@ -4,4 +4,8 @@ build/
 **/build/
 local.properties
 *.iml
+*.p12
+*.jks
+*.keystore
+signing.properties
 

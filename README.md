@@ -77,9 +77,17 @@ app/build/outputs/apk/debug/app-debug.apk
 
 构建成功后，在对应运行页面的 **Artifacts** 中下载 `astra-launcher-debug-<commit SHA>`，解压即可得到 `app-debug.apk`。测试与 Lint 报告单独上传为 `astra-launcher-reports-<commit SHA>`；失败时也会尽量保留已经生成的报告。产物保留 14 天。
 
-无需配置 Secrets，工作流只有仓库内容读取权限，不自动发布 GitHub Release。Actions 固定到具体提交，Gradle 缓存只允许默认分支的非 PR 构建写入。
+Debug 构建无需配置 Secrets。工作流只有仓库内容读取权限，不自动发布 GitHub Release。Actions 固定到具体提交，Gradle 缓存只允许默认分支的非 PR 构建写入。
 
-这些 APK 是用于测试的 Debug 包，并非使用固定正式密钥签名的发行包。不同 CI 运行以及本地构建的 Debug 签名可能不同，不能保证相互覆盖安装；遇到签名不一致时请先导出需要保留的数据，再卸载旧版后安装（卸载会清除应用数据）。正式分发和连续升级需要另行配置稳定的签名密钥。
+Debug 产物仅用于测试，其签名可能因构建环境不同而变化。日常安装请使用 `main` 的推送或手动运行生成的 `astra-launcher-release-<commit SHA>`：其中的 `app-release.apk` 使用与 Astra TV 相同的 Astra Sec 正式证书签名，保留 30 天；混淆映射单独保存在 `astra-launcher-mapping-<commit SHA>`。构建会检查 Release Lint 并核对 APK 证书指纹。PR 和其他分支不使用正式密钥，只生成 Debug 包。
+
+本地正式构建默认读取仓库外的 `~/.android/astra-sec/signing.properties`：
+
+```bash
+./gradlew --no-configuration-cache assembleRelease testDebugUnitTest lintRelease
+```
+
+输出为 `app/build/outputs/apk/release/app-release.apk`。签名配置、GitHub Secrets 和迁移说明见 [签名管理](docs/signing/README.md)。**正式签名不能覆盖旧 Debug 签名安装**；首次迁移需先记录或导出设置，再卸载旧版（会清除应用数据）并安装正式包，之后沿用同一证书即可覆盖升级。
 
 ## 使用手机模拟器预览
 

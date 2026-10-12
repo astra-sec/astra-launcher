@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   build:
-    name: Test, lint and build Debug APK
+    name: Test, lint and build APK
     runs-on: ubuntu-24.04
     timeout-minutes: 30
 
@@ -32,7 +32,7 @@ jobs:
 
       # GitHub-hosted Ubuntu runners include Android SDK command-line tools.
       - name: Install Android SDK platform
-        run: '"${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35"'
+        run: '"${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;34.0.0"'
 
       - name: Set up Gradle cache and validate wrapper
         uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5
@@ -53,6 +53,51 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      # Never expose the release key to PR code or non-main branches.
+      - name: Restore release signing key
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ASTRA_SIGNING_KEYSTORE_BASE64 }}
+        run: |
+          test -n "$KEYSTORE_BASE64" || { echo 'Release signing secret is missing.' >&2; exit 1; }
+          umask 077
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/astra-launcher-release.p12"
+
+      - name: Build signed release and run release Lint
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          ASTRA_SIGNING_STORE_FILE: ${{ runner.temp }}/astra-launcher-release.p12
+          ASTRA_SIGNING_STORE_PASSWORD: ${{ secrets.ASTRA_SIGNING_STORE_PASSWORD }}
+          ASTRA_SIGNING_KEY_ALIAS: ${{ secrets.ASTRA_SIGNING_KEY_ALIAS }}
+          ASTRA_SIGNING_KEY_PASSWORD: ${{ secrets.ASTRA_SIGNING_KEY_PASSWORD }}
+        run: ./gradlew --no-daemon --no-configuration-cache assembleRelease lintRelease
+
+      - name: Verify release certificate
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          "$ANDROID_HOME/build-tools/34.0.0/apksigner" verify --verbose --print-certs \
+            app/build/outputs/apk/release/app-release.apk > "$RUNNER_TEMP/astra-launcher-certificate.txt"
+          grep -Fx 'Signer #1 certificate SHA-256 digest: 4a07274dddebcd69a6107b0e3bd7f0da1499bbc74d00b9c02abb1cdc88e8daf1' \
+            "$RUNNER_TEMP/astra-launcher-certificate.txt"
+
+      - name: Upload signed Release APK
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: astra-launcher-release-${{ github.sha }}
+          path: app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload release obfuscation mapping
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: astra-launcher-mapping-${{ github.sha }}
+          path: app/build/outputs/mapping/release/mapping.txt
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Upload test and lint reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
@@ -62,5 +107,10 @@ jobs:
             app/build/reports/tests/testDebugUnitTest/
             app/build/test-results/testDebugUnitTest/
             app/build/reports/lint-results-debug.*
+            app/build/reports/lint-results-release.*
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Remove temporary release key
+        if: always()
+        run: rm -f -- "$RUNNER_TEMP/astra-launcher-release.p12"
