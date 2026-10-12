@@ -71,6 +71,16 @@ Debug APK 输出到：
 app/build/outputs/apk/debug/app-debug.apk
 ```
 
+### GitHub Actions 自动构建
+
+每次推送或提交 PR 都会触发 `Android build`，也可以在仓库的 **Actions → Android build → Run workflow** 手动运行。工作流使用 Ubuntu 24.04、Temurin JDK 21 和项目自带的 Gradle Wrapper，依次运行单元测试、Android Lint 和 Debug APK 构建。
+
+构建成功后，在对应运行页面的 **Artifacts** 中下载 `astra-launcher-debug-<commit SHA>`，解压即可得到 `app-debug.apk`。测试与 Lint 报告单独上传为 `astra-launcher-reports-<commit SHA>`；失败时也会尽量保留已经生成的报告。产物保留 14 天。
+
+无需配置 Secrets，工作流只有仓库内容读取权限，不自动发布 GitHub Release。Actions 固定到具体提交，Gradle 缓存只允许默认分支的非 PR 构建写入。
+
+这些 APK 是用于测试的 Debug 包，并非使用固定正式密钥签名的发行包。不同 CI 运行以及本地构建的 Debug 签名可能不同，不能保证相互覆盖安装；遇到签名不一致时请先导出需要保留的数据，再卸载旧版后安装（卸载会清除应用数据）。正式分发和连续升级需要另行配置稳定的签名密钥。
+
 ## 使用手机模拟器预览
 
 普通手机模拟器足够验证横屏布局、触摸、应用抽屉、返回链路和方向键焦点。项目的 `LauncherActivity` 固定为横屏。
