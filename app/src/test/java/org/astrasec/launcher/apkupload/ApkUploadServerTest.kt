@@ -20,6 +20,20 @@ class ApkUploadServerTest {
     @get:Rule val temporaryFolder = TemporaryFolder()
 
     @Test
+    fun `default listeners get distinct free ports and keep them until closed`() {
+        withServer { first, _ ->
+            withServer { second, _ ->
+                assertTrue(first.port in 1..65535)
+                assertTrue(second.port in 1..65535)
+                assertTrue(first.port != second.port)
+                assertEquals(first.port, first.start())
+                assertEquals(second.port, second.start())
+                assertEquals(200, exchange(second, "GET / HTTP/1.1\r\nHost: 127.0.0.1:${second.port}\r\n\r\n").status)
+            }
+        }
+    }
+
+    @Test
     fun `serves a self contained page without exposing the pin`() {
         withServer { server, _ ->
             val response = exchange(server, "GET / HTTP/1.1\r\nHost: 127.0.0.1:${server.port}\r\n\r\n")
@@ -241,7 +255,7 @@ class ApkUploadServerTest {
     private fun withServer(onUpload: (File) -> String = { "ok" }, test: (ApkUploadServer, File) -> Unit) {
         val dir = temporaryFolder.newFolder()
         ApkUploadServer(dir, PIN, onUpload).use { server ->
-            server.start(0)
+            server.start()
             test(server, dir)
         }
     }

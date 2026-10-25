@@ -47,7 +47,8 @@ class ApkUploadServer(
     }
 
     @Synchronized
-    fun start(port: Int = 8080): Int {
+    // Port zero asks the OS to allocate a free port atomically; the UI uses localPort.
+    fun start(port: Int = 0): Int {
         check(!closed.get()) { "接收服务已经关闭" }
         listener?.let { return it.localPort }
         require(cacheDir.isDirectory || cacheDir.mkdirs()) { "无法创建接收目录" }
