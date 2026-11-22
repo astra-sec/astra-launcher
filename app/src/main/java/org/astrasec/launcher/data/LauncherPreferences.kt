@@ -1,6 +1,7 @@
 package org.astrasec.launcher.data
 
 import android.content.Context
+import org.astrasec.launcher.model.FavoriteOrder
 
 class LauncherPreferences(context: Context) {
     private val preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
@@ -33,6 +34,10 @@ class LauncherPreferences(context: Context) {
         }
         saveFavorites(favorites)
         return isNowFavorite
+    }
+
+    fun reorderFavorites(componentNames: List<String>) {
+        saveFavorites(FavoriteOrder.merge(favoriteComponents(), componentNames))
     }
 
     private fun saveFavorites(componentNames: List<String>) {

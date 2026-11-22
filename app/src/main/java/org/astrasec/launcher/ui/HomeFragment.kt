@@ -4,9 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -42,7 +44,9 @@ class HomeFragment : AppListFragment(0), DefaultFocusOwner {
     private var dailyImageExecutor: ExecutorService? = null
     private var favoriteGrid: RecyclerView? = null
     private var emptyFavorites: TextView? = null
-    private var allAppsButton: View? = null
+    private var allAppsButton: Button? = null
+    private var favoritesTitle: TextView? = null
+    private var reorderController: FavoriteReorderController? = null
     private var weatherStatus: TextView? = null
     private var weatherAttributionUrl: String? = null
     private var dailyImageWallpaper: ImageView? = null
@@ -72,7 +76,10 @@ class HomeFragment : AppListFragment(0), DefaultFocusOwner {
         wallpaperScrim = view.findViewById(R.id.wallpaperScrim)
         refreshDailyImage()
         allAppsButton = view.findViewById(R.id.allAppsButton)
-        allAppsButton?.setOnClickListener { activity.showAllApps() }
+        allAppsButton?.setOnClickListener {
+            if (reorderController?.finish() != true) activity.showAllApps()
+        }
+        favoritesTitle = view.findViewById(R.id.favoritesTitle)
         bindSystemSetting(view, R.id.wifiButton, SystemSettingKind.WIFI)
         bindSystemSetting(view, R.id.bluetoothButton, SystemSettingKind.BLUETOOTH)
         view.findViewById<View>(R.id.inputSourcesButton)
@@ -94,8 +101,37 @@ class HomeFragment : AppListFragment(0), DefaultFocusOwner {
         favoriteAdapter = configureAppGrid(
             recyclerView = favoriteGrid!!,
             minimumColumnWidthResId = R.dimen.favorite_tile_min_width,
-            onLoaded = ::favoriteApps
+            onLoaded = ::favoriteApps,
+            onAppClick = { app ->
+                if (reorderController?.isArranging == true) {
+                    beginFavoriteOrder(app.componentName.flattenToString())
+                } else launchApp(app)
+            },
+            onAppLongClick = { app ->
+                if (reorderController?.isArranging == true) {
+                    beginFavoriteOrder(app.componentName.flattenToString())
+                } else showAppActions(app)
+            }
         )
+        reorderController = FavoriteReorderController(favoriteGrid!!, favoriteAdapter, preferences) { arranging ->
+            favoritesTitle?.setText(if (arranging) R.string.favorites_arranging else R.string.favorites)
+            allAppsButton?.setText(if (arranging) R.string.finish_order else R.string.all_apps)
+        }
+    }
+
+    fun beginFavoriteOrder(component: String) { reorderController?.begin(component) }
+
+    fun handleReorderKey(event: KeyEvent): Boolean = reorderController?.handleKey(event) == true
+
+    fun onUserInput() { reorderController?.onUserInput() }
+
+    fun finishFavoriteOrder() { reorderController?.finish() }
+
+    override fun onAppsLoaded() {
+        arguments?.getString("arrangeComponent")?.let { component ->
+            arguments?.remove("arrangeComponent")
+            beginFavoriteOrder(component)
+        }
     }
 
     override fun requestDefaultFocus(): Boolean {
@@ -204,6 +240,9 @@ class HomeFragment : AppListFragment(0), DefaultFocusOwner {
     }
 
     override fun onDestroyView() {
+        reorderController?.dispose()
+        reorderController = null
+        favoritesTitle = null
         favoriteGrid = null
         emptyFavorites = null
         allAppsButton = null
@@ -216,6 +255,11 @@ class HomeFragment : AppListFragment(0), DefaultFocusOwner {
         dailyImageWallpaper = null
         wallpaperScrim = null
         super.onDestroyView()
+    }
+
+    override fun onPause() {
+        finishFavoriteOrder()
+        super.onPause()
     }
 
     override fun onDestroy() {

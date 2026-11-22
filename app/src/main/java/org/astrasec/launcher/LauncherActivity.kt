@@ -34,11 +34,20 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     fun showHome() {
+        (supportFragmentManager.findFragmentById(R.id.fragmentContainer) as? HomeFragment)?.finishFavoriteOrder()
         replaceRoot(HomeFragment(), TAG_HOME)
     }
 
     fun showAllApps() {
         replaceRoot(AppDrawerFragment(), TAG_APP_DRAWER)
+    }
+
+    fun showFavoriteOrder(component: String) {
+        val home = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as? HomeFragment
+        if (home != null) home.beginFavoriteOrder(component)
+        else replaceRoot(HomeFragment().apply {
+            arguments = Bundle().apply { putString("arrangeComponent", component) }
+        }, TAG_HOME)
     }
 
     fun showSettings() {
@@ -57,14 +66,19 @@ class LauncherActivity : AppCompatActivity() {
 
     @Suppress("DEPRECATION")
     override fun onBackPressed() {
-        when (supportFragmentManager.findFragmentById(R.id.fragmentContainer)) {
-            is HomeFragment -> Unit
+        when (val fragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)) {
+            is HomeFragment -> fragment.finishFavoriteOrder()
             is ActivityToolsFragment, is ShellToolsFragment, is ApkUploadFragment -> showSettings()
             else -> showHome()
         }
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        val home = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as? HomeFragment
+        if (home?.handleReorderKey(event) == true) {
+            directionalNavigationActive = true
+            return true
+        }
         if (
             event.keyCode in DIRECTIONAL_KEYS &&
             !directionalNavigationActive
@@ -79,6 +93,7 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        (supportFragmentManager.findFragmentById(R.id.fragmentContainer) as? HomeFragment)?.onUserInput()
         if (event.actionMasked == MotionEvent.ACTION_DOWN) {
             directionalNavigationActive = false
             currentFocus?.clearFocus()

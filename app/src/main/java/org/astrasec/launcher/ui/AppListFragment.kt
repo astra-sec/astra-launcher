@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.astrasec.launcher.R
+import org.astrasec.launcher.LauncherActivity
 import org.astrasec.launcher.data.AppRepository
 import org.astrasec.launcher.data.LauncherPreferences
 import org.astrasec.launcher.model.GridSpanCalculator
@@ -26,11 +27,13 @@ abstract class AppListFragment(layoutResId: Int) : Fragment(layoutResId) {
     protected fun configureAppGrid(
         recyclerView: RecyclerView,
         minimumColumnWidthResId: Int,
-        onLoaded: (List<LaunchableApp>) -> List<LaunchableApp>
+        onLoaded: (List<LaunchableApp>) -> List<LaunchableApp>,
+        onAppClick: (LaunchableApp) -> Unit = ::launchApp,
+        onAppLongClick: (LaunchableApp) -> Unit = ::showAppActions
     ): AppGridAdapter {
         val adapter = AppGridAdapter(
-            onAppClick = ::launchApp,
-            onAppLongClick = ::showAppActions
+            onAppClick = onAppClick,
+            onAppLongClick = onAppLongClick
         )
         val layoutManager = GridLayoutManager(requireContext(), 1)
         val minimumColumnWidth = resources.getDimensionPixelSize(minimumColumnWidthResId)
@@ -57,6 +60,7 @@ abstract class AppListFragment(layoutResId: Int) : Fragment(layoutResId) {
     }
 
     protected open fun onFavoritesChanged() = Unit
+    protected open fun onAppsLoaded() = Unit
 
     protected fun initializeDependencies() {
         preferences = LauncherPreferences(requireContext())
@@ -79,19 +83,20 @@ abstract class AppListFragment(layoutResId: Int) : Fragment(layoutResId) {
         executor?.execute {
             val allApps = repository.loadLaunchableApps()
             activity?.runOnUiThread {
-                if (!isAdded || generation != loadGeneration.get()) return@runOnUiThread
+                if (!isAdded || view == null || generation != loadGeneration.get()) return@runOnUiThread
                 adapter.submitItems(onLoaded(allApps))
+                onAppsLoaded()
             }
         }
     }
 
-    private fun launchApp(app: LaunchableApp) {
+    protected fun launchApp(app: LaunchableApp) {
         repository.launch(app).onFailure {
             Toast.makeText(requireContext(), R.string.app_launch_failed, Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun showAppActions(app: LaunchableApp) {
+    protected fun showAppActions(app: LaunchableApp) {
         val component = app.componentName.flattenToString()
         val favoriteAction = if (preferences.isFavorite(component)) {
             getString(R.string.remove_from_favorites)
@@ -99,9 +104,11 @@ abstract class AppListFragment(layoutResId: Int) : Fragment(layoutResId) {
             getString(R.string.add_to_favorites)
         }
 
+        val actions = mutableListOf(favoriteAction, getString(R.string.app_info))
+        if (preferences.isFavorite(component)) actions.add(getString(R.string.arrange_favorites))
         AlertDialog.Builder(requireContext())
             .setTitle(app.label)
-            .setItems(arrayOf(favoriteAction, getString(R.string.app_info))) { dialog, which ->
+            .setItems(actions.toTypedArray()) { dialog, which ->
                 when (which) {
                     0 -> {
                         val isFavorite = preferences.toggleFavorite(component)
@@ -113,6 +120,7 @@ abstract class AppListFragment(layoutResId: Int) : Fragment(layoutResId) {
                         onFavoritesChanged()
                     }
                     1 -> repository.openAppInfo(app)
+                    2 -> (requireActivity() as LauncherActivity).showFavoriteOrder(component)
                 }
                 dialog.dismiss()
             }

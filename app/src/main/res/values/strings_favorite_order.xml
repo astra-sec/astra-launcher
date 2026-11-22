@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="arrange_favorites">排列图标</string>
+    <string name="finish_order">完成</string>
+    <string name="favorites_arranging">常用应用 · 排列中</string>
+    <string name="order_instructions">拖动或用方向键移动图标，确定或返回结束排列。\n顺序自动保存，闲置 30 秒自动结束。</string>
+</resources>
